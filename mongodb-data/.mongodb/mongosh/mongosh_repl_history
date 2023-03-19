@@ -1,0 +1,14 @@
+exit
+show dbs
+show users
+use testdb
+exit
+show roles
+show users
+use admin
+show dbs
+show users
+exit
+show roles
+show dbs
+show users
