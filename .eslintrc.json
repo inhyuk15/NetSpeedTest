@@ -1,0 +1,28 @@
+{
+  "env": {
+    "commonjs": true,
+    "es2021": true,
+    "node": true
+  },
+
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "eslint:recommended",
+    "standard-with-typescript",
+    "prettier",
+    "eslint-config-prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    // commonjs모듈 사용으로 발생하는 에러 검사하지 않기.
+    // 작은 프로젝트라 commonjs나 es script 모듈을 굳이 나눠야하나 싶음
+    "@typescript-eslint/no-var-requires": "off"
+  },
+  "root": true
+}
