@@ -9,7 +9,7 @@ import debug from 'debug';
 import http from 'http';
 
 import dotenv from 'dotenv';
-import { createSocketServer } from '../routes/ws_speedtest';
+import { createSocketServer } from '../routes/socket_speedtest';
 
 dotenv.config();
 

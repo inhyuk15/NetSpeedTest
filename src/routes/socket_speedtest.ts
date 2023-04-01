@@ -11,6 +11,9 @@ const createSocketServer = (httpServer: HttpServer): SocketServer => {
 
   io.on('connection', (socket: Socket) => {
     console.log('connected in server');
+    socket.on('disconnect', () => {
+      console.log('client disconnected');
+    });
     socket.on('measure_latency', (start: number, upstreamData: ArrayBuffer, downstreamDataSize: number) => {
       const end = Date.now();
       const latency = end - start;
