@@ -9,6 +9,7 @@ import debug from 'debug';
 import http from 'http';
 
 import dotenv from 'dotenv';
+import { createSocketServer } from '../routes/ws_speedtest';
 
 dotenv.config();
 
@@ -28,17 +29,10 @@ app.set('port', port);
 
 const server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
-
+createSocketServer(server);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
 
 function normalizePort(val: string): number | string | boolean {
   const port = parseInt(val, 10);
