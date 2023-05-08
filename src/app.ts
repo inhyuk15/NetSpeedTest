@@ -10,12 +10,18 @@ import apiRouter from './routes/api';
 import cors from 'cors';
 
 const app: Express = express();
+const corsOptions = {
+  origin: 'http://172.30.1.29:5173',
+  // origin: 'http://192.168.32.3:5173',
+
+  credentials: true,
+};
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());

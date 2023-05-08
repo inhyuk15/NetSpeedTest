@@ -1,14 +1,16 @@
 exit
-show dbs
-show users
+db.measurementresults.find()
+show collections
 use testdb
+show dbs
 exit
-show roles
-show users
+db.measurementresults.find()
+show collections
+show collectoins
+use testdb
+show dbs
+exit
+db.system.users.find()
+show collections
 use admin
 show dbs
-show users
-exit
-show roles
-show dbs
-show users

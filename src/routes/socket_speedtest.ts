@@ -5,7 +5,7 @@ const createSocketServer = (httpServer: HttpServer): SocketServer => {
   const io = new SocketServer(httpServer, {
     path: '/socket.io',
     cors: {
-      origin: 'http://localhost:5173',
+      origin: 'http://172.30.1.29:5173',
     },
   });
 
