@@ -27,8 +27,22 @@ const saveSpeedtest = async (req: Request, res: Response, next: NextFunction): P
   }
 };
 
+const getAllSpeedtests = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const allSpeedtests = await MeasurementResult.find();
+    res.status(200).json(allSpeedtests);
+  } catch (error) {
+    console.error('Error retrieving all speedtests:', error);
+    next(new Error('Error retrieving all speedtests'));
+  }
+};
+
 router.post('/save_speedtest', (req, res, next) => {
   saveSpeedtest(req, res, next).catch(next);
+});
+
+router.get('/speedtest', (req, res, next) => {
+  getAllSpeedtests(req, res, next).catch(next);
 });
 
 export default router;

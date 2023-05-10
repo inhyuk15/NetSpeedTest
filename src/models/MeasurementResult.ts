@@ -4,8 +4,12 @@ const MeasurementResultSchema = new mongoose.Schema(
   {
     avgPing: Number,
     jitter: Number,
-    upstreamSpeed: Number,
-    downstreamSpeed: Number,
+    upstream: Number,
+    downstream: Number,
+    floorNumber: Number,
+    rootNumber: Number,
+    locationClass: Number,
+    userCookie: String,
   },
   { timestamps: true }
 );

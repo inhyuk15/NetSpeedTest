@@ -11,9 +11,7 @@ import cors from 'cors';
 
 const app: Express = express();
 const corsOptions = {
-  origin: 'http://172.30.1.29:5173',
-  // origin: 'http://192.168.32.3:5173',
-
+  origin: process.env.CLIENT_IP,
   credentials: true,
 };
 
