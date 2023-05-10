@@ -36,3 +36,7 @@ node_modules/.cache/
 # database
 mongodb-data/
 data/
+local/
+
+#github
+.gitmessage.txt
