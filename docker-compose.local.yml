@@ -17,7 +17,9 @@ services:
     command: mongod --auth
 
   express:
-    image: pulchra13/netspeedtest:0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - mongodb
     ports:
