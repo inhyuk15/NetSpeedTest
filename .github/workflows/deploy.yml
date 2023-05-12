@@ -38,5 +38,7 @@ jobs:
           username: ${{ secrets.EC2_SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            export MONGO_URI=${{ secrets.MONGO_URI }}
+            export CLIENT_IP=${{ secrets.CLIENT_IP }}
             cd /home/ec2-user
             docker-compose up -d
