@@ -8,11 +8,13 @@ import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 import apiRouter from './routes/api';
 import cors from 'cors';
+import SpeedTest from './routes/librespeed/SpeedTest';
 
 const app: Express = express();
 const corsOptions = {
-  origin: process.env.CLIENT_IP,
-  credentials: true,
+  // origin: process.env.CLIENT_IP,
+  // origin: '127.0.0.1:8888',
+  // credentials: true,
 };
 
 // view engine setup
@@ -29,6 +31,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
+app.use('/', SpeedTest);
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(createError(404));
