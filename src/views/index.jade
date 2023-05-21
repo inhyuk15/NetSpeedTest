@@ -1,17 +1,7 @@
 extends layout
 
 block content
-  //- h1= title
-  //- p Welcome to #{title}
+  h1= title
+  p Welcome to #{title}
 
   div hihihi
-  script.
-    var webSocket = new WebSocket("ws://localhost:5000/");
-    webSocket.onopen = function() {
-      console.log('open~~~');
-    };
-    webSocket.onmessage = function(event) {
-      console.log(event.data);
-      webSocket.send('send from client');
-    }
-    websocket.send("aaaa");

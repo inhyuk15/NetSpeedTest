@@ -41,3 +41,4 @@ jobs:
             export MONGO_URI=${{ secrets.MONGO_URI }}
             export CLIENT_IP=${{ secrets.CLIENT_IP }}
             cd /home/ec2-user
+            docker-compose up -d

@@ -15,10 +15,13 @@
     "debug": "~2.6.9",
     "dotenv": "16.0.3",
     "express": "4.16.4",
+    "gps-distance": "0.0.4",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "mongoose": "7.1.0",
     "morgan": "~1.9.1",
+    "random-bytes": "1.0.0",
+    "request": "2.88.2",
     "socket.io": "4.6.1"
   },
   "devDependencies": {
@@ -28,6 +31,8 @@
     "@types/http-errors": "2.0.1",
     "@types/morgan": "1.9.4",
     "@types/node": "18.15.3",
+    "@types/random-bytes": "1.0.1",
+    "@types/request": "2.48.8",
     "@typescript-eslint/eslint-plugin": "5.55.0",
     "@typescript-eslint/parser": "5.55.0",
     "eslint": "8.36.0",

@@ -8,6 +8,7 @@ import indexRouter from './routes/index';
 import usersRouter from './routes/users';
 import apiRouter from './routes/api';
 import cors from 'cors';
+import SpeedTest from './routes/librespeed/SpeedTest';
 
 const app: Express = express();
 const corsOptions = {
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
+app.use('/', SpeedTest);
 // catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
   next(createError(404));
