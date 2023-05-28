@@ -40,5 +40,21 @@ jobs:
           script: |
             export MONGO_URI=${{ secrets.MONGO_URI }}
             export CLIENT_IP=${{ secrets.CLIENT_IP }}
+            export GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}
+            export GCS_BUCKET=${{ secrets.GCS_BUCKET }}
+            export GCP_SA_KEY=${{ secrets.GCP_SA_KEY }}
+            export DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+            export BACKUP_FILE=${{ secrets.BACKUP_FILE }}
             cd /home/ec2-user
             docker-compose up -d
+            # Install gsutil
+            curl https://sdk.cloud.google.com | bash
+            source /root/google-cloud-sdk/path.bash.inc
+            # Auth with GCP
+            echo $GCP_SA_KEY > sa_key.json
+            gcloud auth activate-service-account --key-file sa_key.json
+            gcloud config set project $GCP_PROJECT_ID
+            # Download backup file from GCS
+            gsutil cp gs://$GCS_BUCKET/$BACKUP_FILE .
+            # Restore MongoDB from backup
+            mongorestore --uri $MONGO_URI --nsInclude "$DATABASE_NAME.*" --gzip --archive=$BACKUP_FILE
