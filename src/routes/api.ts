@@ -1,6 +1,8 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
 import mongoose from 'mongoose';
 import MeasurementResult from '../models/MeasurementResult';
+import User from '../models/User';
+import SpeedTest from '../models/SpeedTest';
 
 const router = express.Router();
 const MONGO_URI = process.env.MONGO_URI ?? 'mongodb://mongodb:27017/testdb';
@@ -17,24 +19,32 @@ mongoose
 const saveSpeedtest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const { dlStatus, ulStatus, pingStatus, jitterStatus, clientIp, floorNumber, roomNumber, locationClass, userCookie } =
     req.body;
-  // const measurementResult = req.body;
 
-  const measurementResult = {
+  const speedTest = new SpeedTest({
     dlStatus,
     ulStatus,
     pingStatus,
     jitterStatus,
     clientIp,
+  });
+
+  const user = new User({
     floorNumber,
     roomNumber,
     locationClass,
     userCookie,
-  };
+  });
 
-  console.log('Received data: ', measurementResult);
-  const newMeasurement = new MeasurementResult(measurementResult);
   try {
+    await speedTest.save();
+    await user.save();
+
+    const newMeasurement = new MeasurementResult({
+      user: user._id,
+      speedTest: speedTest._id,
+    });
     await newMeasurement.save();
+
     res.status(200).json({ success: true });
   } catch (error) {
     console.error('Error saving measurement result:', error);
@@ -44,7 +54,7 @@ const saveSpeedtest = async (req: Request, res: Response, next: NextFunction): P
 
 const getAllSpeedtests = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const allSpeedtests = await MeasurementResult.find();
+    const allSpeedtests = await MeasurementResult.find().populate('user speedTest');
     res.status(200).json(allSpeedtests);
   } catch (error) {
     console.error('Error retrieving all speedtests:', error);
