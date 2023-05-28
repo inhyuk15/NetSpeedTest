@@ -15,7 +15,22 @@ mongoose
   });
 
 const saveSpeedtest = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const measurementResult = req.body;
+  const { dlStatus, ulStatus, pingStatus, jitterStatus, clientIp, floorNumber, roomNumber, locationClass, userCookie } =
+    req.body;
+  // const measurementResult = req.body;
+
+  const measurementResult = {
+    dlStatus,
+    ulStatus,
+    pingStatus,
+    jitterStatus,
+    clientIp,
+    floorNumber,
+    roomNumber,
+    locationClass,
+    userCookie,
+  };
+
   console.log('Received data: ', measurementResult);
   const newMeasurement = new MeasurementResult(measurementResult);
   try {
@@ -37,12 +52,45 @@ const getAllSpeedtests = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
+const getSpeedtestsByDay = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const { day } = req.query;
+  const dayAsNumber = Number(day);
+
+  const data = await MeasurementResult.aggregate([
+    {
+      $project: {
+        dayOfWeek: { $dayOfWeek: '$createdAt' },
+        document: '$$ROOT',
+      },
+    },
+    {
+      $match: {
+        dayOfWeek: dayAsNumber,
+      },
+    },
+    {
+      $group: {
+        _id: '$dayOfWeek',
+        count: { $sum: 1 },
+        documents: { $push: '$document' },
+      },
+    },
+  ]);
+
+  res.status(200).json(data);
+};
+
 router.post('/save_speedtest', (req, res, next) => {
   saveSpeedtest(req, res, next).catch(next);
 });
 
 router.get('/speedtest', (req, res, next) => {
   getAllSpeedtests(req, res, next).catch(next);
+});
+
+// ex) Sunday: speedtest_by_day?day=1, Tuesday: speedtest_by_day?day=3
+router.get('/speedtest_by_day', (req, res, next) => {
+  getSpeedtestsByDay(req, res, next).catch(next);
 });
 
 export default router;

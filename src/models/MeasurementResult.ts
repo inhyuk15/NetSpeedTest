@@ -1,15 +1,24 @@
 import mongoose from 'mongoose';
 
+const SpeedTestSchema = new mongoose.Schema({
+  dlStatus: Number,
+  ulStatus: Number,
+  pingStatus: Number,
+  jitterStatus: Number,
+  clientIp: String,
+});
+
+const UserSchema = new mongoose.Schema({
+  floorNumber: Number,
+  roomNumber: Number,
+  locationClass: Number,
+  userCookie: String,
+});
+
 const MeasurementResultSchema = new mongoose.Schema(
   {
-    avgPing: Number,
-    jitter: Number,
-    upstreamSpeed: Number,
-    downstreamSpeed: Number,
-    floorNumber: Number,
-    roomNumber: Number,
-    locationClass: Number,
-    userCookie: String,
+    ...SpeedTestSchema.obj,
+    ...UserSchema.obj,
   },
   { timestamps: true }
 );

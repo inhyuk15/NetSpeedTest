@@ -28,5 +28,5 @@ services:
       - ./logs:/app/logs
     environment:
       - MONGO_URI=mongodb://testuser:testpassword@mongodb:27017/testdb
-      - CLIENT_IP=http://172.30.1.32:5173
+      - CLIENT_IP=http://172.30.1.30:5173
 
