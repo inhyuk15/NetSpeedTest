@@ -40,5 +40,32 @@ jobs:
           script: |
             export MONGO_URI=${{ secrets.MONGO_URI }}
             export CLIENT_IP=${{ secrets.CLIENT_IP }}
+            export GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}
+            export GCS_BUCKET=${{ secrets.GCS_BUCKET }}
+            export GCP_SA_KEY=${{ secrets.GCP_SA_KEY }}
+            export DATABASE_NAME=${{ secrets.DATABASE_NAME }}
+            export BACKUP_FILE=${{ secrets.BACKUP_FILE }}
             cd /home/ec2-user
             docker-compose up -d
+            # Install gsutil if not exists
+            if ! command -v gsutil &> /dev/null
+            then
+                # Install gsutil
+                curl https://sdk.cloud.google.com | bash
+                source /root/google-cloud-sdk/path.bash.inc
+            else
+                # Update gcloud components
+                gcloud components update
+            fi
+            # Auth with GCP
+            echo $GCP_SA_KEY | base64 --decode > sa_key.json
+            gcloud auth activate-service-account --key-file sa_key.json
+            gcloud config set project $GCP_PROJECT_ID
+            # Download backup file from GCS
+            gsutil cp gs://$GCS_BUCKET/$BACKUP_FILE .
+            # Copy backup file into MongoDB Docker container
+            docker cp $BACKUP_FILE ec2-user-mongodb-1:/tmp/
+            # Install mongodb-org-tools in the MongoDB Docker container if it does not exist
+            docker exec ec2-user-mongodb-1 bash -c 'if ! command -v mongorestore &> /dev/null; then apt-get update && apt-get install -y mongodb-org-tools; fi'
+            # Restore MongoDB from backup inside Docker container
+            docker exec ec2-user-mongodb-1 mongorestore --uri $MONGO_URI --nsInclude "$DATABASE_NAME.*" --gzip --archive=/tmp/$BACKUP_FILE
