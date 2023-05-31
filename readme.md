@@ -1,6 +1,6 @@
 # NetSpeedTest
 
-Briefly describe your project here. Include what the project is for and what problem it is designed to solve.
+this project is server for https://github.com/ap-performance-test/AP-Performance-Test-Front.git
 
 ## Technology Stack
 
@@ -8,13 +8,17 @@ Briefly describe your project here. Include what the project is for and what pro
 - Database: MongoDB
 - Cloud Storage: Google Cloud Storage
 - CI/CD: GitHub Actions, AWS EC2
-- Architecture: this project is server for https://github.com/ap-performance-test/AP-Performance-Test-Front.git
 
 when frontend tests network speed(upstream, downstream, ping, jitter ...), server provide these link
 
 - /garbage: router to estimate downstream
 - /empty: router to estimate upstream, ping ,jitter
 - /getIP: router to provide user's IP address
+
+and application of measured data can be achived through api
+
+- /api/speedtest
+- /api/speedtest_by_day?day=${day}
 
 and save speedtest's data with user's data in mongodb running in docker container
 
