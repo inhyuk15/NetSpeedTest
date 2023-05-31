@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import MeasurementResult from '../models/MeasurementResult';
 import User from '../models/User';
 import SpeedTest from '../models/SpeedTest';
+import moment from 'moment';
 
 const router = express.Router();
 const MONGO_URI = process.env.MONGO_URI ?? 'mongodb://mongodb:27017/testdb';
@@ -40,8 +41,8 @@ const saveSpeedtest = async (req: Request, res: Response, next: NextFunction): P
     await user.save();
 
     const newMeasurement = new MeasurementResult({
-      user: user._id,
-      speedTest: speedTest._id,
+      user,
+      speedTest,
     });
     await newMeasurement.save();
 
@@ -61,33 +62,25 @@ const getAllSpeedtests = async (req: Request, res: Response, next: NextFunction)
     next(new Error('Error retrieving all speedtests'));
   }
 };
-
 const getSpeedtestsByDay = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const { day } = req.query;
-  const dayAsNumber = Number(day);
+  try {
+    const { day } = req.query;
+    const dayAsNumber = Number(day);
+    const startOfDay = moment().day(dayAsNumber).startOf('day').toDate();
+    const endOfDay = moment().day(dayAsNumber).endOf('day').toDate();
 
-  const data = await MeasurementResult.aggregate([
-    {
-      $project: {
-        dayOfWeek: { $dayOfWeek: '$createdAt' },
-        document: '$$ROOT',
+    const data = await MeasurementResult.find({
+      createdAt: {
+        $gte: startOfDay,
+        $lte: endOfDay,
       },
-    },
-    {
-      $match: {
-        dayOfWeek: dayAsNumber,
-      },
-    },
-    {
-      $group: {
-        _id: '$dayOfWeek',
-        count: { $sum: 1 },
-        documents: { $push: '$document' },
-      },
-    },
-  ]);
+    }).populate('user speedTest');
 
-  res.status(200).json(data);
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error retrieving speedtests by day:', error);
+    next(new Error('Error retrieving speedtests by day'));
+  }
 };
 
 router.post('/save_speedtest', (req, res, next) => {
