@@ -1,6 +1,6 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
 import mongoose from 'mongoose';
-import MeasurementResult from '../models/MeasurementResult';
+import { MeasurementResult } from '../models/MeasurementResult';
 import User from '../models/User';
 import SpeedTest from '../models/SpeedTest';
 import moment from 'moment';

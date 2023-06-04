@@ -17,7 +17,9 @@ services:
     command: mongod --auth
 
   express:
-    image: pulchra13/netspeedtest:0.1
+    # image: pulchra13/netspeedtest:0.1
+    build:
+      context: ./dockerfile
     depends_on:
       - mongodb
     ports:
@@ -26,5 +28,5 @@ services:
       - ./logs:/app/logs
     environment:
       - MONGO_URI=mongodb://testuser:testpassword@mongodb:27017/testdb
-      - CLIENT_IP=http://192.168.1.101:5173
+      - CLIENT_IP=http://192.168.0.66:5173
 

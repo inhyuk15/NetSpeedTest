@@ -26,7 +26,7 @@ and save speedtest's data with user's data in mongodb running in docker containe
 
 1. How to clone the repository
 
-```
+```shell
 git clone https://github.com/ap-performance-test/NetSpeedTest.git
 
 docker-compose up
@@ -52,6 +52,20 @@ MONGO_USER=testuser
 MONGO_PASSWORD=testpassword
 MONGO_DB_NAME=testdb
 ```
+
+## Running Tests
+
+To run the tests for this project, follow the steps below:
+
+1. Make sure the server is running locally on `http://localhost:3000`.
+
+2. Open a terminal and navigate to the project directory.
+
+3. Run the following command to execute the tests:
+
+   ```shell
+   npm test
+   ```
 
 # Deployment
 
