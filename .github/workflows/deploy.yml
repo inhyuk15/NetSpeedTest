@@ -40,12 +40,14 @@ jobs:
           script: |
             export MONGO_URI=${{ secrets.MONGO_URI }}
             export CLIENT_IP=${{ secrets.CLIENT_IP }}
+            export PULSE_CNT_SERVER=${{ secrets.PULSE_CNT_SERVER }}
             export GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}
             export GCS_BUCKET=${{ secrets.GCS_BUCKET }}
             export GCP_SA_KEY=${{ secrets.GCP_SA_KEY }}
             export DATABASE_NAME=${{ secrets.DATABASE_NAME }}
             export BACKUP_FILE=${{ secrets.BACKUP_FILE }}
             cd /home/ec2-user
+            docker-compose down
             docker-compose up -d
             # Install gsutil if not exists
             if ! command -v gsutil &> /dev/null

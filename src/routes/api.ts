@@ -1,11 +1,12 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
 import mongoose from 'mongoose';
 
-import moment from 'moment';
 import { MeasurementResult, SpeedTest, User } from '../models';
+import axios, { type AxiosResponse } from 'axios';
 
 const router = express.Router();
 const MONGO_URI = process.env.MONGO_URI ?? 'mongodb://mongodb:27017/testdb';
+const PULSE_CNT_SERVER = process.env.PULSE_CNT_SERVER ?? 'http://3.34.130.16:3011';
 
 mongoose
   .connect(MONGO_URI)
@@ -115,6 +116,22 @@ const getSpeedtestsByDay = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
+interface IApiResponse {
+  outblock: Array<{ MSG: number }>;
+  RESULT: Record<string, number>;
+}
+
+const getPulseCache = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const response: AxiosResponse<IApiResponse> = await axios.get(`${PULSE_CNT_SERVER}/pulse_cnt`);
+    const data = response.data;
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('Error retrieving all speedtests:', error);
+    next(new Error('Error retrieving all speedtests'));
+  }
+};
+
 router.post('/save_speedtest', (req, res, next) => {
   saveSpeedtest(req, res, next).catch(next);
 });
@@ -126,6 +143,10 @@ router.get('/speedtest', (req, res, next) => {
 // ex) Sunday: speedtest_by_day?day=1, Tuesday: speedtest_by_day?day=3
 router.get('/speedtest_by_day', (req, res, next) => {
   getSpeedtestsByDay(req, res, next).catch(next);
+});
+
+router.get('/pulse_cnt', (req, res, next) => {
+  getPulseCache(req, res, next).catch(next);
 });
 
 export default router;
