@@ -53,6 +53,21 @@ MONGO_PASSWORD=testpassword
 MONGO_DB_NAME=testdb
 ```
 
+## Running Tests
+
+To run the tests for this project, follow the steps below:
+
+1. Make sure the server is running locally on `http://localhost:4000`.
+   or you can change exporting port number with testAPI.ts and docker-compose.local.yml
+
+2. Open a terminal and navigate to the project directory.
+
+3. Run the following command to execute the tests:
+
+   ```shell
+   npm test
+   ```
+
 # Deployment
 
 if you want deploy to this project to your server, refer to .github/workflow/deploy.yml
