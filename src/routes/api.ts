@@ -78,19 +78,37 @@ const getAllSpeedtests = async (req: Request, res: Response, next: NextFunction)
 };
 const getSpeedtestsByDay = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
+    // const { day } = req.query;
+    // const dayAsNumber = Number(day);
+    // const startOfDay = moment().day(dayAsNumber).startOf('day').toDate();
+    // const endOfDay = moment().day(dayAsNumber).endOf('day').toDate();
+
+    // const data = await MeasurementResult.find({
+    //   createdAt: {
+    //     $gte: startOfDay,
+    //     $lte: endOfDay,
+    //   },
+    // }).populate('user speedTest');
+
+    // res.status(200).json(data);
     const { day } = req.query;
     const dayAsNumber = Number(day);
-    const startOfDay = moment().day(dayAsNumber).startOf('day').toDate();
-    const endOfDay = moment().day(dayAsNumber).endOf('day').toDate();
 
-    const data = await MeasurementResult.find({
-      createdAt: {
-        $gte: startOfDay,
-        $lte: endOfDay,
+    const data = await MeasurementResult.aggregate([
+      {
+        $addFields: {
+          dayOfWeek: { $dayOfWeek: '$createdAt' },
+        },
       },
-    }).populate('user speedTest');
+      {
+        $match: { dayOfWeek: dayAsNumber + 1 }, // +1 is because $dayOfWeek in MongoDB returns a number between 1 (Sunday) and 7 (Saturday)
+      },
+    ]);
 
-    res.status(200).json(data);
+    const populatedData = await User.populate(data, { path: 'user' });
+    const finalData = await SpeedTest.populate(populatedData, { path: 'speedTest' });
+
+    res.status(200).json(finalData);
   } catch (error) {
     console.error('Error retrieving speedtests by day:', error);
     next(new Error('Error retrieving speedtests by day'));

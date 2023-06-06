@@ -2,18 +2,17 @@ import { MeasurementResult, SpeedTest, User } from '../models';
 
 const getPreviousDateByDay = (day: number): Date => {
   const date = new Date();
+  // date.setHours(0, 0, 0, 0);
   const diff = date.getDay() - day;
-  if (diff > 0) {
-    date.setDate(date.getDate() - diff);
-  } else if (diff < 0) {
-    date.setDate(date.getDate() - 7 + diff);
-  }
+
+  date.setDate(date.getDate() - 7 - diff);
+
   return date;
 };
 
 export const createDummy = async (day: number, dlMinRange: number, dlMaxRange: number): Promise<void> => {
   const floorNumberRange = [4, 6]; // 층수 범위
-  const roomPerFloor = 30; // 각 층에 있는 방의 개수
+  const roomPerFloor = 35; // 각 층에 있는 방의 개수
 
   const locationClassRange = [1, 9]; // 위치 클래스 범위
   const dlStatusRange = [dlMinRange, dlMaxRange]; // 다운로드 속도 범위
@@ -63,9 +62,15 @@ export const createDummy = async (day: number, dlMinRange: number, dlMaxRange: n
 };
 
 export const createDummys = async (): Promise<void> => {
-  for (let i = 0; i < 300; i++) {
-    for (let j = 0; j < 2; j++) await createDummy(j, 40, 300);
-    for (let j = 3; j <= 6; j++) await createDummy(j, 40, 300);
-    await createDummy(2, 10, 50);
+  for (let i = 0; i < 150; i++) {
+    for (let j = 0; j < 7; j++) {
+      if (j === 3) {
+        // Wednesday
+        await createDummy(j, 10, 50);
+      } else {
+        // Other days
+        await createDummy(j, 40, 300);
+      }
+    }
   }
 };
