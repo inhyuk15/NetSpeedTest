@@ -4,4 +4,24 @@ block content
   h1= title
   p Welcome to #{title}
 
-  div hihihi
+  button(id="create-dummys-button") Create Dummys
+  button(id="delete-all-data-button") Delete All Data
+
+  script.
+    document.getElementById('create-dummys-button').onclick = function() {
+      fetch('/utils/create-dummys', { method: 'POST' })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    };
+
+    document.getElementById('delete-all-data-button').onclick = function() {
+      fetch('/utils/delete-all-data', { method: 'POST' })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    };
