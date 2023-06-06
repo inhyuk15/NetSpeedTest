@@ -17,7 +17,7 @@ services:
     command: mongod --auth
 
   express:
-    image: pulchra13/netspeedtest:0.2
+    image: pulchra13/netspeedtest:0.3
     pull_policy: always
     depends_on:
       - mongodb
@@ -28,4 +28,4 @@ services:
     environment:
       - MONGO_URI=${MONGO_URI}
       - CLIENT_IP=${CLIENT_IP}
-
+      - PULSE_CNT_SERVER=${PULSE_CNT_SERVER}

@@ -15,10 +15,14 @@ when frontend tests network speed(upstream, downstream, ping, jitter ...), serve
 - /empty: router to estimate upstream, ping ,jitter
 - /getIP: router to provide user's IP address
 
-and application of measured data can be achived through api
+application of measured data can be achived through api
 
 - /api/speedtest
 - /api/speedtest_by_day?day=${day}
+
+cache server api
+
+- /api/pulse_cnt
 
 and save speedtest's data with user's data in mongodb running in docker container
 
