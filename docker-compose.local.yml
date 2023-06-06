@@ -17,14 +17,13 @@ services:
     command: mongod --auth
 
   express:
-    # image: pulchra13/netspeedtest:0.1
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
       - mongodb
     ports:
-      - "3000:3000"
+      - "4000:3000"
     volumes:
       - ./logs:/app/logs
     environment:

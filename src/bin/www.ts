@@ -9,7 +9,6 @@ import debug from 'debug';
 import http from 'http';
 
 import dotenv from 'dotenv';
-import { createSocketServer } from '../routes/socket_speedtest';
 
 dotenv.config();
 
@@ -29,7 +28,6 @@ app.set('port', port);
 
 const server = http.createServer(app);
 
-createSocketServer(server);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

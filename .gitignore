@@ -3,6 +3,7 @@
 
 # Distribution directories
 /dist
+/dist-test
 
 # IDE and editor files
 /.vscode
