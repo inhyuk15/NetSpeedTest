@@ -1,7 +1,15 @@
-import mongoose from 'mongoose';
+import mongoose, { type Schema } from 'mongoose';
 
-// SpeedTest.js
-const SpeedTestSchema = new mongoose.Schema({
+export interface ISpeedTest {
+  _id: Schema.Types.ObjectId;
+  dlStatus: number;
+  ulStatus: number;
+  pingStatus: number;
+  clientIp: string;
+  jitterStatus: number;
+}
+
+const SpeedTestSchema = new mongoose.Schema<ISpeedTest>({
   dlStatus: Number,
   ulStatus: Number,
   pingStatus: Number,

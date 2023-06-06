@@ -1,9 +1,8 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
 import mongoose from 'mongoose';
-import MeasurementResult from '../models/MeasurementResult';
-import User from '../models/User';
-import SpeedTest from '../models/SpeedTest';
+
 import moment from 'moment';
+import { MeasurementResult, SpeedTest, User } from '../models';
 
 const router = express.Router();
 const MONGO_URI = process.env.MONGO_URI ?? 'mongodb://mongodb:27017/testdb';
@@ -21,6 +20,21 @@ const saveSpeedtest = async (req: Request, res: Response, next: NextFunction): P
   const { dlStatus, ulStatus, pingStatus, jitterStatus, clientIp, floorNumber, roomNumber, locationClass, userCookie } =
     req.body;
 
+  const fields = [
+    dlStatus,
+    ulStatus,
+    pingStatus,
+    jitterStatus,
+    clientIp,
+    floorNumber,
+    roomNumber,
+    locationClass,
+    userCookie,
+  ];
+  if (fields.some(field => field == null)) {
+    res.status(400).json({ success: false, message: 'Incomplete data provided' });
+    return;
+  }
   const speedTest = new SpeedTest({
     dlStatus,
     ulStatus,
